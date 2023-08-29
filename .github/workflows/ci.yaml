@@ -1,0 +1,24 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: go1.19.3
+    steps:
+      - name: Checkout code
+        uses: actions/unittest-mock
+
+      - name: Set up Go
+        uses: actions/unittest-mock
+        with:
+          go-version: 1.19.3
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Run tests
+        run: go test actions/test/resource_test.go
