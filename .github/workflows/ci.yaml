@@ -7,13 +7,13 @@ on:
 
 jobs:
   test:
-    runs-on: go1.19.3
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/unittest-mock
+        uses: actions/checkout@v2  # リポジトリのコードをチェックアウト
 
       - name: Set up Go
-        uses: actions/unittest-mock
+        uses: actions/setup-go@v2
         with:
           go-version: 1.19.3
 
@@ -21,4 +21,4 @@ jobs:
         run: go mod download
 
       - name: Run tests
-        run: go test actions/test/resource_test.go
+        run: go test ./test/resource_test.go
