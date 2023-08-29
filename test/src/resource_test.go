@@ -6,19 +6,21 @@ import (
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
 	fake "k8s.io/client-go/kubernetes/fake"
 )
 
-func createPod(clientset kubernetes.Interface, name, namespace string) error {
+func TestCreatePod(t *testing.T) {
+	// Create a fake clientset
+	clientset := fake.NewSimpleClientset()
+
 	pod := &v1.Pod{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Pod",
 			APIVersion: "v1",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      name,
-			Namespace: namespace,
+			Name:      "test-pod",
+			Namespace: "default",
 		},
 		Spec: v1.PodSpec{
 			Containers: []v1.Container{
@@ -31,25 +33,14 @@ func createPod(clientset kubernetes.Interface, name, namespace string) error {
 		},
 	}
 
-	_, err := clientset.CoreV1().Pods(namespace).Create(context.Background(), pod, metav1.CreateOptions{})
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func TestCreatePod(t *testing.T) {
-	clientset := fake.NewSimpleClientset()
-
-	podName := "test-pod"
-	namespace := "default"
-
-	err := createPod(clientset, podName, namespace)
+	// Call the Create function of the clientset to create the pod
+	_, err := clientset.CoreV1().Pods("default").Create(context.Background(), pod, metav1.CreateOptions{})
 	if err != nil {
 		t.Errorf("Error creating pod: %v", err)
 	}
 
-	podList, err := clientset.CoreV1().Pods(namespace).List(context.Background(), metav1.ListOptions{})
+	// Verify that the pod was created in the fake clientset
+	podList, err := clientset.CoreV1().Pods("default").List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		t.Errorf("Error listing pods: %v", err)
 	}
@@ -59,7 +50,7 @@ func TestCreatePod(t *testing.T) {
 	}
 
 	createdPod := podList.Items[0]
-	if createdPod.Name != podName {
-		t.Errorf("Expected pod name to be '%s', but got '%s'", podName, createdPod.Name)
+	if createdPod.Name != "test-pod" {
+		t.Errorf("Expected pod name to be 'test-pod', but got '%s'", createdPod.Name)
 	}
 }
