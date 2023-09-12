@@ -3,7 +3,7 @@ package test
 import (
 	"context"
 	"testing"
-	"example.com/m/mock_practice"
+	"example.com/m/test/mock_practice"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	fake "k8s.io/client-go/kubernetes/fake"
 )
