@@ -1,9 +1,9 @@
-package test
+package mock_practice
 
 import (
 	"context"
 	"testing"
-	"example.com/m/test/mock_practice"
+	// "example.com/m/mock_practice"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	fake "k8s.io/client-go/kubernetes/fake"
 )
@@ -14,7 +14,7 @@ func TestFakePod(t *testing.T) {
 	podName := "test-pod"
 	namespace := "default"
 
-	err := mock_practice.CreatePod(clientset, podName, namespace)
+	err := CreatePod(clientset, podName, namespace)
 	if err != nil {
 		t.Errorf("Error creating pod: %v", err)
 	}
